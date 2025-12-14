@@ -1,42 +1,70 @@
-# Hotel Management System
+# 🏨 Royal Suite - Hotel Management System
 
-This is a desktop application for managing a hotel, built with Java. It features a multi-server backend (RMI and EJB-like services) and a JavaFX client.
+Welcome to **Royal Suite**, a comprehensive desktop application designed to streamline hotel operations. Built with Java, this project features a robust, multi-server backend and an elegant JavaFX client, providing a seamless experience for hotel staff and management.
 
-## Project Structure
+## ✨ Key Features
 
-The project is divided into several Maven modules:
+*   **👤 User Authentication:** Secure login for different user roles (Admin, Employee).
+*   **🛌 Room Management:** Manage room inventory, types, and availability.
+*   **👥 Client Management:** Maintain a database of hotel clients.
+*   **📅 Reservation Management:** Create, view, confirm, and cancel reservations.
+*   **💳 Payment & Invoicing:** Process payments and generate detailed invoices for clients.
+*   **📊 Advanced Reporting:** Generate reports on hotel occupancy, revenue, and client history.
+*   **🎨 Modern UI:** A clean and intuitive user interface built with JavaFX.
 
-- `hotel-common`: Contains shared code, including JPA entities, business interfaces, and enums.
-- `hotel-rmi-server`: A server that exposes core services (Authentication, Chamber, Client, Reservation) via Java RMI.
-- `hotel-ejb-server`: A second server that exposes additional services (Payment, Reporting) via Java RMI.
-- `hotel-client-ui`: The graphical user interface (GUI) built with JavaFX, which connects to both servers to provide the application's functionality.
+## 🏗️ Architecture Overview
 
-## Prerequisites
+The Royal Suite application is built on a distributed architecture, composed of several Maven modules:
 
-To build and run this project, you will need:
+*   **`hotel-common`**: A shared module containing JPA entities, business interfaces, and enums.
+*   **`hotel-rmi-server`**: An RMI-based server that exposes core services (Authentication, Room, Client, Reservation).
+*   **`hotel-ejb-server`**: An EJB-based server that provides advanced services (Payment, Reporting, Invoicing).
+*   **`hotel-client-ui`**: The JavaFX client application that consumes services from both the RMI and EJB servers.
 
-- **Java Development Kit (JDK) 11:** The project is built with Java 11.
-- **Apache Maven:** Used for dependency management and building the project.
+This architecture allows for a clear separation of concerns and demonstrates the integration of different Java enterprise technologies.
 
-## Database Setup
+## 🛠️ Technologies Used
 
-The application uses an **H2 file-based database**. The database files (`hoteldb.mv.db`) will be automatically created in your user home directory (e.g., `C:\Users\YourUser` on Windows or `/home/youruser` on Linux) the first time you run a server.
+*   **Java 11**
+*   **Maven** for dependency management
+*   **JavaFX** for the client UI
+*   **Java RMI** for core backend services
+*   **Java EJB** for advanced backend services
+*   **Hibernate** as the JPA provider
+*   **H2 Database** for data persistence
+*   **WildFly** as the EJB container
 
-No manual database setup is required.
+## 🚀 Getting Started
 
-## Build
+To get the Royal Suite application up and running, you will need to have the following prerequisites installed on your system.
 
-To build the entire project and install the artifacts in your local Maven repository, run the following command from the project's root directory:
+### Prerequisites
 
-```bash
-mvn clean install
-```
+*   **Java Development Kit (JDK) 11**
+*   **Apache Maven**
+*   **WildFly Application Server**
 
-## Running the Application
+### Build
 
-To run the application, you must start the two servers first, and then the client application.
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/your-username/hotel-management-system.git
+    cd hotel-management-system
+    ```
 
-### 1. Start the RMI Server
+2.  **Build the project:**
+    Run the following command from the project's root directory to build all modules and install the artifacts in your local Maven repository:
+    ```bash
+    mvn clean install
+    ```
+
+## 🏃‍♂️ Running the Application
+
+To run the application, you must start the backend servers first, and then the client application.
+
+### 1. Backend Setup
+
+#### a. Start the RMI Server
 
 This server manages authentication, rooms, clients, and reservations.
 
@@ -46,39 +74,43 @@ Open a terminal and run the following command from the project's root directory:
 mvn exec:java -pl hotel-rmi-server -Dexec.mainClass="com.hotel.rmi.server.RMIServer"
 ```
 
-The server will start and listen on port `1096`. It will also initialize the database with some test data (e.g., an admin user and some rooms) on the first run.
+The server will start and listen on port `1099`.
 
-### 2. Start the EJB (RMI) Server
+#### b. Deploy the EJB Services
 
-This server manages payments and reporting.
+The EJB services (Payment, Reporting, Invoicing) are deployed to a WildFly application server.
 
-Open a **second terminal** and run the following command from the project's root directory:
+1.  **Start your WildFly server.**
+2.  **Locate the EJB module artifact:** The file `hotel-ejb-server-1.0-SNAPSHOT.jar` can be found in the `hotel-ejb-server/target` directory.
+3.  **Deploy the artifact:** Copy the `hotel-ejb-server-1.0-SNAPSHOT.jar` file to the `standalone/deployments` directory of your WildFly server.
 
-```bash
-mvn exec:java -pl hotel-ejb-server -Dexec.mainClass="com.hotel.ejb.server.EJBServer"
-```
+WildFly will automatically deploy the EJB services.
 
-The server will start and listen on port `1100`.
+### 2. Frontend Setup
 
-### 3. Start the Client UI
+#### Start the Client UI
 
-Once both servers are running, you can start the client application.
+Once the RMI server is running and the EJB services are deployed, you can start the client application.
 
-Open a **third terminal** and run the following command from the project's root directory:
+Open a **new terminal** and run the following command from the project's root directory:
 
 ```bash
 mvn exec:java -pl hotel-client-ui -Dexec.mainClass="com.hotel.client.HotelApplication"
 ```
 
-The login window of the hotel management system should appear.
+The login window of the Royal Suite management system should appear.
 
-## Default Credentials
+## 🔑 Default Credentials
 
 The following user accounts are created by default when the RMI server is started for the first time:
 
-- **Administrator:**
-  - **Username:** `admin`
-  - **Password:** `admin123`
-- **Employee:**
-  - **Username:** `employe`
-  - **Password:** `employe123`
+*   **Administrator:**
+    *   **Username:** `admin`
+    *   **Password:** `admin123`
+*   **Employee:**
+    *   **Username:** `employe`
+    *   **Password:** `employe123`
+
+## 🖼️ Screenshots
+
+*(Placeholder for screenshots of the application)*
