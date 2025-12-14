@@ -7,7 +7,9 @@ import com.hotel.ejb.utils.JPAUtil;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Stateless

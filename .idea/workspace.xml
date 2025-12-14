@@ -6,13 +6,13 @@
   <component name="ChangeListManager">
     <list default="true" id="a894fdfd-9e41-4139-9d00-e59c4763a4cb" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hotel-client-ui/src/main/java/com/hotel/client/controllers/ClientDashboardController.java" beforeDir="false" afterPath="$PROJECT_DIR$/hotel-client-ui/src/main/java/com/hotel/client/controllers/ClientDashboardController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/hotel-client-ui/src/main/java/com/hotel/client/controllers/EmployeDashboardController.java" beforeDir="false" afterPath="$PROJECT_DIR$/hotel-client-ui/src/main/java/com/hotel/client/controllers/EmployeDashboardController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hotel-common/src/main/java/com/hotel/entities/Paiement.java" beforeDir="false" afterPath="$PROJECT_DIR$/hotel-common/src/main/java/com/hotel/entities/Paiement.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hotel-common/src/main/java/com/hotel/interfaces/IPaiementService.java" beforeDir="false" afterPath="$PROJECT_DIR$/hotel-common/src/main/java/com/hotel/interfaces/IPaiementService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hotel-common/src/main/java/com/hotel/interfaces/IRapportService.java" beforeDir="false" afterPath="$PROJECT_DIR$/hotel-common/src/main/java/com/hotel/interfaces/IRapportService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hotel-common/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/hotel-common/src/main/resources/META-INF/persistence.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hotel-ejb-server/src/main/java/com/hotel/ejb/services/PaiementServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/hotel-ejb-server/src/main/java/com/hotel/ejb/services/PaiementServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hotel-ejb-server/src/main/java/com/hotel/ejb/services/RapportServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/hotel-ejb-server/src/main/java/com/hotel/ejb/services/RapportServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hotel-client-ui/src/main/java/com/hotel/client/controllers/InvoiceController.java" beforeDir="false" afterPath="$PROJECT_DIR$/hotel-client-ui/src/main/java/com/hotel/client/controllers/InvoiceController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hotel-client-ui/src/main/java/com/hotel/client/controllers/PaiementController.java" beforeDir="false" afterPath="$PROJECT_DIR$/hotel-client-ui/src/main/java/com/hotel/client/controllers/PaiementController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hotel-client-ui/src/main/java/com/hotel/client/utils/ServiceManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/hotel-client-ui/src/main/java/com/hotel/client/utils/ServiceManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hotel-ejb-server/src/main/java/com/hotel/ejb/services/FactureServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/hotel-ejb-server/src/main/java/com/hotel/ejb/services/FactureServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hotel-rmi-server/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/hotel-rmi-server/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -95,7 +95,7 @@
       <workItem from="1765547859792" duration="4215000" />
       <workItem from="1765562078563" duration="7049000" />
       <workItem from="1765575228562" duration="3246000" />
-      <workItem from="1765736652329" duration="7623000" />
+      <workItem from="1765736652329" duration="10413000" />
     </task>
     <servers />
   </component>

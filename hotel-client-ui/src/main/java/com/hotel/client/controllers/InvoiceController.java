@@ -40,7 +40,7 @@ public class InvoiceController {
         reservationIdLabel.setText(String.valueOf(paiement.getReservation().getId()));
         chambreLabel.setText(paiement.getReservation().getChambre().getNumero());
         montantLabel.setText(String.format("%.2f €", paiement.getMontant()));
-        methodeLabel.setText(paiement.getMethodePaiement());
+        methodeLabel.setText(paiement.getMethodePaiement().name());
         
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         dateLabel.setText(sdf.format(paiement.getDatePaiement()));
@@ -57,7 +57,7 @@ public class InvoiceController {
             writer.write("ID de Réservation: " + paiement.getReservation().getId() + "\n");
             writer.write("Chambre: " + paiement.getReservation().getChambre().getNumero() + "\n");
             writer.write("Montant Payé: " + String.format("%.2f €", paiement.getMontant()) + "\n");
-            writer.write("Méthode de Paiement: " + paiement.getMethodePaiement() + "\n");
+            writer.write("Méthode de Paiement: " + paiement.getMethodePaiement().name() + "\n");
             writer.write("Date de Paiement: " + dateLabel.getText() + "\n");
             writer.close();
             

@@ -15,6 +15,7 @@ public class ServiceManager {
     private static IAuthenticationService authenticationService;
     private static IPaiementService paiementService;
     private static IRapportService rapportService;
+    private static IFactureService factureService;
 
     public static void connecterServicesRMI() throws Exception {
         String rmiUrl = "rmi://" + RMI_HOST + ":" + RMI_PORT + "/";
@@ -32,6 +33,7 @@ public class ServiceManager {
 
         paiementService = (IPaiementService) Naming.lookup(ejbUrl + "PaiementService");
         rapportService = (IRapportService) Naming.lookup(ejbUrl + "RapportService");
+        factureService = (IFactureService) Naming.lookup(ejbUrl + "FactureService");
 
         System.out.println("✓ Connexion aux services EJB établie");
     }
@@ -64,5 +66,9 @@ public class ServiceManager {
 
     public static IRapportService getRapportService() {
         return rapportService;
+    }
+
+    public static IFactureService getFactureService() {
+        return factureService;
     }
 }

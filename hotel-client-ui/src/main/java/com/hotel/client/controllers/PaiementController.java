@@ -63,7 +63,7 @@ public class PaiementController {
     @FXML
     private void handlePayWithCard() {
         if (validateCardDetails()) {
-            processPayment("Carte de crédit");
+            processPayment(com.hotel.enums.TypePaiement.CARTE_CREDIT);
         } else {
             statusLabel.setText("Détails de la carte invalides.");
         }
@@ -71,7 +71,7 @@ public class PaiementController {
 
     @FXML
     private void handlePayWithPayPal() {
-        processPayment("PayPal");
+        processPayment(com.hotel.enums.TypePaiement.VIREMENT);
     }
 
     private boolean validateCardDetails() {
@@ -80,7 +80,7 @@ public class PaiementController {
                !cvvField.getText().isEmpty();
     }
 
-    private void processPayment(String methode) {
+    private void processPayment(com.hotel.enums.TypePaiement methode) {
         try {
             Paiement paiement = new Paiement();
             paiement.setReservation(reservation);

@@ -4,6 +4,7 @@ import com.hotel.client.utils.ServiceManager;
 import com.hotel.client.utils.SessionManager;
 import com.hotel.entities.Chambre;
 import com.hotel.entities.Client;
+import com.hotel.entities.Facture;
 import com.hotel.entities.Reservation;
 import com.hotel.enums.TypeChambre;
 import javafx.collections.FXCollections;
@@ -296,10 +297,16 @@ public class ClientDashboardController {
                 downloadBtn.setOnAction(event -> {
                     Reservation item = getTableView().getItems().get(getIndex());
                     try {
-                        String facture = ServiceManager.getPaiementService().genererFacture(item.getId());
+                        Facture facture = ServiceManager.getFactureService().findByReservation(item);
+                        if (facture == null) {
+                            facture = ServiceManager.getFactureService().genererFacture(item);
+                        }
                         String fileName = "facture-reservation-" + item.getId() + ".txt";
                         try (java.io.FileWriter writer = new java.io.FileWriter(fileName)) {
-                            writer.write(facture);
+                            writer.write("Facture N°: " + facture.getNumeroFacture() + "\n");
+                            writer.write("Date: " + facture.getDateFacture() + "\n");
+                            writer.write("Montant: " + facture.getMontant() + " €\n");
+                            writer.write("Reservation: " + facture.getReservation().getId() + "\n");
                         }
                         showAlert("Facture téléchargée", "La facture a été téléchargée sous: " + fileName);
                     } catch (Exception ex) {
