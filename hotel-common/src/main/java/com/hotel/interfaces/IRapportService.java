@@ -1,5 +1,7 @@
 package com.hotel.interfaces;
 
+import com.hotel.entities.Client;
+
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.time.LocalDate;
@@ -22,4 +24,6 @@ public interface IRapportService extends Remote {
     Map<String, Object> getTopClients(int nombre) throws RemoteException;
 
     String exporterRapport(Map<String, Object> rapport) throws RemoteException;
+
+    Map<String, Object> genererRapportHistoriqueClient(Client client) throws RemoteException;
 }

@@ -13,6 +13,7 @@
         <class>com.hotel.entities.Reservation</class>
         <class>com.hotel.entities.Paiement</class>
         <class>com.hotel.entities.Utilisateur</class>
+        <class>com.hotel.entities.Facture</class>
 
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>

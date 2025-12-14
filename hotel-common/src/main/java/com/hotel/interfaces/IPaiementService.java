@@ -11,7 +11,7 @@ public interface IPaiementService extends Remote {
 
     Paiement creerPaiement(Paiement paiement) throws RemoteException;
 
-    boolean traiterPaiement(Integer paiementId, String methodePaiement) throws RemoteException;
+    boolean traiterPaiement(Integer paiementId, com.hotel.enums.TypePaiement methodePaiement) throws RemoteException;
 
     boolean rembourserPaiement(Integer paiementId) throws RemoteException;
 
@@ -23,7 +23,5 @@ public interface IPaiementService extends Remote {
 
     List<Paiement> getPaiementsParStatut(StatutPaiement statut) throws RemoteException;
 
-    String genererFacture(Integer reservationId) throws RemoteException;
-
-    Double calculerRevenusPeriode(java.time.LocalDate dateDebut, java.time.LocalDate dateFin) throws RemoteException;
+    
 }

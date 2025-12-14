@@ -1,6 +1,8 @@
 package com.hotel.entities;
 
 import com.hotel.enums.StatutPaiement;
+import com.hotel.enums.TypePaiement;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -21,8 +23,9 @@ public class Paiement implements Serializable {
     @Column(nullable = false)
     private Double montant;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "methode_paiement", length = 50)
-    private String methodePaiement;
+    private TypePaiement methodePaiement;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -42,7 +45,7 @@ public class Paiement implements Serializable {
         this.statut = StatutPaiement.EN_ATTENTE;
     }
 
-    public Paiement(Reservation reservation, Double montant, String methodePaiement) {
+    public Paiement(Reservation reservation, Double montant, TypePaiement methodePaiement) {
         this();
         this.reservation = reservation;
         this.montant = montant;
@@ -74,11 +77,11 @@ public class Paiement implements Serializable {
         this.montant = montant;
     }
 
-    public String getMethodePaiement() {
+    public TypePaiement getMethodePaiement() {
         return methodePaiement;
     }
 
-    public void setMethodePaiement(String methodePaiement) {
+    public void setMethodePaiement(TypePaiement methodePaiement) {
         this.methodePaiement = methodePaiement;
     }
 

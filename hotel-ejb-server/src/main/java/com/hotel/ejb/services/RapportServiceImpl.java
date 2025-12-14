@@ -269,4 +269,24 @@ public class RapportServiceImpl extends java.rmi.server.UnicastRemoteObject impl
         return key.replace("_", " ")
                 .substring(0, 1).toUpperCase() + key.substring(1).replace("_", " ");
     }
+
+    @Override
+    public Map<String, Object> genererRapportHistoriqueClient(Client client) {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            Map<String, Object> rapport = new HashMap<>();
+            rapport.put("client", client);
+
+            TypedQuery<Reservation> query = em.createQuery(
+                    "SELECT r FROM Reservation r WHERE r.client = :client ORDER BY r.dateArrivee DESC",
+                    Reservation.class);
+            query.setParameter("client", client);
+            List<Reservation> reservations = query.getResultList();
+            rapport.put("reservations", reservations);
+
+            return rapport;
+        } finally {
+            em.close();
+        }
+    }
 }

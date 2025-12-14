@@ -2,11 +2,13 @@ package com.hotel.client.controllers;
 
 import com.hotel.client.utils.ServiceManager;
 import com.hotel.client.utils.SessionManager;
-import com.hotel.entities.*;
+import com.hotel.entities.Facture;
+import com.hotel.entities.Reservation;
 import com.hotel.enums.*;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -18,6 +20,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.time.LocalDate;
 import java.util.List;
@@ -395,7 +398,7 @@ public class EmployeDashboardController {
     private VBox createPaiementsView() {
         VBox view = new VBox(20); view.setPadding(new Insets(30)); view.setStyle(BG_COLOR);
 
-        Label title = new Label("Caisse & Facturation");
+        Label title = new Label("Paiements & Facturation");
         title.setStyle("-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;");
 
         // Stats Cards
@@ -458,143 +461,101 @@ public class EmployeDashboardController {
 
     private void handlePayment(TableView<Reservation> table, Button refresh) {
         Reservation r = table.getSelectionModel().getSelectedItem();
-        if (r == null) { showAlert("Info", "Sélectionnez une réservation."); return; }
+        if (r == null) {
+            showAlert("Info", "Sélectionnez une réservation.");
+            return;
+        }
 
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-        styleAlert(confirm);
-        confirm.setTitle("Encaissement");
-        confirm.setHeaderText("Montant à encaisser : " + r.getMontantTotal() + " €");
-        confirm.setContentText("Confirmer la réception du paiement ?");
+        Dialog<TypePaiement> dialog = new Dialog<>();
+        dialog.setTitle("Encaissement");
+        dialog.setHeaderText("Montant à encaisser : " + r.getMontantTotal() + " €");
+        dialog.getDialogPane().setStyle("-fx-background-color: #1e293b; -fx-text-fill: white;");
 
-        confirm.showAndWait().ifPresent(resp -> {
-            if(resp == ButtonType.OK) {
+        ButtonType saveBtn = new ButtonType("Confirmer", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(saveBtn, ButtonType.CANCEL);
+
+        ComboBox<TypePaiement> typeC = new ComboBox<>(FXCollections.observableArrayList(TypePaiement.values()));
+        typeC.setStyle("-fx-background-color: #334155; -fx-mark-color: white;");
+        dialog.getDialogPane().setContent(typeC);
+
+        dialog.setResultConverter(btn -> {
+            if (btn == saveBtn) {
+                return typeC.getValue();
+            }
+            return null;
+        });
+
+        dialog.showAndWait().ifPresent(typePaiement -> {
+            if (typePaiement != null) {
                 try {
-                    Paiement p = new Paiement(r, r.getMontantTotal(), "Espèces");
+                    Paiement p = new Paiement(r, r.getMontantTotal(), typePaiement);
                     p = ServiceManager.getPaiementService().creerPaiement(p);
-                    ServiceManager.getPaiementService().traiterPaiement(p.getId(), "Espèces");
+                    ServiceManager.getPaiementService().traiterPaiement(p.getId(), typePaiement);
                     ServiceManager.getReservationService().confirmerReservation(r.getId());
                     refresh.fire();
-                } catch(Exception ex) { showAlert("Erreur", ex.getMessage()); }
+                } catch (Exception ex) {
+                    showAlert("Erreur", ex.getMessage());
+                }
             }
         });
     }
 
     private void afficherFacture(Reservation r) {
-        Stage fStage = new Stage();
-        VBox root = new VBox(20);
-        root.setPadding(new Insets(40));
-        root.setStyle("-fx-background-color: white;"); // White paper look
+        try {
+            Facture facture = ServiceManager.getFactureService().findByReservation(r);
+            if (facture == null) {
+                facture = ServiceManager.getFactureService().genererFacture(r);
+            }
 
-        Label header = new Label("HÔTEL ROYAL SUITE");
-        header.setFont(Font.font("Times New Roman", FontWeight.BOLD, 24));
+            Stage fStage = new Stage();
+            VBox root = new VBox(20);
+            root.setPadding(new Insets(40));
+            root.setStyle("-fx-background-color: white;"); // White paper look
 
-        Label sub = new Label("FACTURE N° " + r.getId() + "\nDate: " + LocalDate.now());
+            Label header = new Label("HÔTEL ROYAL SUITE");
+            header.setFont(Font.font("Times New Roman", FontWeight.BOLD, 24));
 
-        GridPane details = new GridPane();
-        details.setHgap(20); details.setVgap(10);
-        details.add(new Label("Client:"), 0, 0); details.add(new Label(r.getClient().getNomComplet()), 1, 0);
-        details.add(new Label("Chambre:"), 0, 1); details.add(new Label(r.getChambre().getNumero() + " (" + r.getChambre().getType() + ")"), 1, 1);
-        details.add(new Label("Séjour:"), 0, 2); details.add(new Label(r.getDateArrivee() + " au " + r.getDateDepart()), 1, 2);
+            Label sub = new Label("FACTURE N° " + facture.getNumeroFacture() + "\nDate: " + facture.getDateFacture());
 
-        Label total = new Label("TOTAL TTC: " + String.format("%.2f €", r.getMontantTotal()));
-        total.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #0f172a; -fx-border-color: black; -fx-border-width: 2 0 0 0; -fx-padding: 10 0 0 0;");
+            GridPane details = new GridPane();
+            details.setHgap(20);
+            details.setVgap(10);
+            details.add(new Label("Client:"), 0, 0);
+            details.add(new Label(r.getClient().getNomComplet()), 1, 0);
+            details.add(new Label("Chambre:"), 0, 1);
+            details.add(new Label(r.getChambre().getNumero() + " (" + r.getChambre().getType() + ")"), 1, 1);
+            details.add(new Label("Séjour:"), 0, 2);
+            details.add(new Label(r.getDateArrivee() + " au " + r.getDateDepart()), 1, 2);
 
-        Button print = new Button("Fermer");
-        print.setOnAction(e -> fStage.close());
+            Label total = new Label("TOTAL TTC: " + String.format("%.2f €", facture.getMontant()));
+            total.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #0f172a; -fx-border-color: black; -fx-border-width: 2 0 0 0; -fx-padding: 10 0 0 0;");
 
-        root.getChildren().addAll(header, new Separator(), sub, details, new Separator(), total, print);
-        fStage.setScene(new Scene(root, 400, 600));
-        fStage.setTitle("Facture");
-        fStage.show();
+            Button print = new Button("Fermer");
+            print.setOnAction(e -> fStage.close());
+
+            root.getChildren().addAll(header, new Separator(), sub, details, new Separator(), total, print);
+            fStage.setScene(new Scene(root, 400, 600));
+            fStage.setTitle("Facture");
+            fStage.show();
+        } catch (Exception e) {
+            showAlert("Erreur", "Impossible de générer ou d'afficher la facture.\n" + e.getMessage());
+        }
     }
 
     // ==========================================
     // 5. VUE RAPPORTS
     // ==========================================
     private VBox createRapportsView() {
-        VBox view = new VBox(20); view.setPadding(new Insets(30)); view.setStyle(BG_COLOR);
-        Label title = new Label("Rapports & Statistiques");
-        title.setStyle("-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;");
-
-        // Controls
-        HBox controls = new HBox(15);
-        controls.setAlignment(Pos.CENTER_LEFT);
-        controls.setStyle("-fx-background-color: #1e293b; -fx-padding: 15; -fx-background-radius: 8;");
-
-        DatePicker dStart = new DatePicker(LocalDate.now().minusMonths(1));
-        DatePicker dEnd = new DatePicker(LocalDate.now());
-        styleDatePicker(dStart); styleDatePicker(dEnd);
-
-        Button genBtn = createStyledButton("Générer Rapport", ACCENT_BLUE);
-        controls.getChildren().addAll(darkLabel("Du:"), dStart, darkLabel("Au:"), dEnd, genBtn);
-
-        // Results Grid
-        GridPane statsGrid = new GridPane();
-        statsGrid.setHgap(20); statsGrid.setVgap(20);
-
-        VBox statOcc = createStatCard("Taux d'occupation", "0%", ACCENT_BLUE);
-        VBox statRev = createStatCard("Revenu Période", "0 €", ACCENT_GOLD);
-        VBox statRes = createStatCard("Réservations", "0", ACCENT_GREEN);
-
-        statsGrid.add(statOcc, 0, 0);
-        statsGrid.add(statRev, 1, 0);
-        statsGrid.add(statRes, 2, 0);
-
-        // Top Clients Table
-        Label topLbl = new Label("🏆 Top Clients");
-        topLbl.setStyle(TEXT_WHITE + "-fx-font-size: 18px; -fx-padding: 10 0 0 0;");
-
-        TableView<ClientStat> clientTable = new TableView<>();
-        clientTable.setStyle(TABLE_STYLE);
-        clientTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-
-        TableColumn<ClientStat, String> nameCol = new TableColumn<>("Nom");
-        nameCol.setCellValueFactory(new PropertyValueFactory<>("nomComplet"));
-
-        TableColumn<ClientStat, Integer> countCol = new TableColumn<>("Séjours");
-        countCol.setCellValueFactory(new PropertyValueFactory<>("nombreReservations"));
-
-        TableColumn<ClientStat, Double> totalCol = new TableColumn<>("Total Dépensé");
-        totalCol.setCellValueFactory(new PropertyValueFactory<>("montantTotal"));
-
-        clientTable.getColumns().addAll(nameCol, countCol, totalCol);
-        clientTable.setPrefHeight(200);
-
-        genBtn.setOnAction(e -> {
-            LocalDate s = dStart.getValue();
-            LocalDate end = dEnd.getValue();
-            if(s == null || end == null) return;
-
-            List<Reservation> periodRes = null;
-            try {
-                periodRes = ServiceManager.getReservationService().getReservationsPourPeriode(s, end);
-            } catch (RemoteException ex) {
-                throw new RuntimeException(ex);
-            }
-
-            double rev = periodRes.stream().filter(r -> r.getStatut() != StatutReservation.ANNULEE).mapToDouble(Reservation::getMontantTotal).sum();
-            long count = periodRes.size();
-
-            updateStatCard(statRev, String.format("%.2f €", rev));
-            updateStatCard(statRes, String.valueOf(count));
-            updateStatCard(statOcc, "Calculating..."); // Mock, requires complex logic
-
-            // Top Clients Logic
-            Map<Client, Double> map = periodRes.stream()
-                    .filter(r -> r.getStatut() != StatutReservation.ANNULEE)
-                    .collect(Collectors.groupingBy(Reservation::getClient, Collectors.summingDouble(Reservation::getMontantTotal)));
-
-            List<ClientStat> stats = map.entrySet().stream()
-                    .map(entry -> new ClientStat(entry.getKey().getNomComplet(), 0, entry.getValue())) // Simplification
-                    .sorted((a,b) -> Double.compare(b.getMontantTotal(), a.getMontantTotal()))
-                    .limit(5)
-                    .collect(Collectors.toList());
-
-            clientTable.setItems(FXCollections.observableArrayList(stats));
-        });
-
-        view.getChildren().addAll(title, controls, statsGrid, topLbl, clientTable);
-        return view;
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hotel/client/reporting-view.fxml"));
+            VBox view = loader.load();
+            view.setPadding(new Insets(30));
+            view.setStyle(BG_COLOR);
+            return view;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new VBox();
+        }
     }
 
     // ==========================================
