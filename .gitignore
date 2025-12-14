@@ -38,7 +38,6 @@ build/
 /hotel-client-ui/
 /hotel-common/
 /hotel-ejb-server/
-/hotel-rmi-server/
 
 ### Mac OS ###
 .DS_Store
