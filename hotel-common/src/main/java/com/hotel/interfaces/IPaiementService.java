@@ -7,21 +7,19 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
 
-public interface IPaiementService extends Remote {
+public interface IPaiementService {
 
-    Paiement creerPaiement(Paiement paiement) throws RemoteException;
+    Paiement creerPaiement(Paiement paiement);
 
-    boolean traiterPaiement(Integer paiementId, com.hotel.enums.TypePaiement methodePaiement) throws RemoteException;
+    boolean traiterPaiement(Integer paiementId, com.hotel.enums.TypePaiement methodePaiement);
 
-    boolean rembourserPaiement(Integer paiementId) throws RemoteException;
+    boolean rembourserPaiement(Integer paiementId);
 
-    Paiement getPaiementById(Integer id) throws RemoteException;
+    Paiement getPaiementById(Integer id);
 
-    Paiement getPaiementParReservation(Integer reservationId) throws RemoteException;
+    Paiement getPaiementParReservation(Integer reservationId);
 
-    List<Paiement> getAllPaiements() throws RemoteException;
+    List<Paiement> getAllPaiements();
 
-    List<Paiement> getPaiementsParStatut(StatutPaiement statut) throws RemoteException;
-
-    
+    List<Paiement> getPaiementsParStatut(StatutPaiement statut);
 }

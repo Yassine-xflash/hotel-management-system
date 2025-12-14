@@ -15,12 +15,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class RapportServiceImpl extends java.rmi.server.UnicastRemoteObject implements IRapportService {
-    private static final long serialVersionUID = 1L;
-
-    public RapportServiceImpl() throws java.rmi.RemoteException {
-        super();
-    }
+@Stateless
+public class RapportServiceImpl implements IRapportService {
 
     @Override
     public Map<String, Object> genererRapportOccupation(LocalDate dateDebut, LocalDate dateFin) {

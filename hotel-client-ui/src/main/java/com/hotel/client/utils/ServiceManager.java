@@ -2,12 +2,14 @@ package com.hotel.client.utils;
 
 import com.hotel.interfaces.*;
 
-import java.rmi.Naming;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import java.util.Properties;
 
 public class ServiceManager {
     private static final String RMI_HOST = "localhost";
     private static final int RMI_PORT = 1099;
-    private static final int EJB_PORT = 1100;
 
     private static IChambreService chambreService;
     private static IClientService clientService;
@@ -20,20 +22,31 @@ public class ServiceManager {
     public static void connecterServicesRMI() throws Exception {
         String rmiUrl = "rmi://" + RMI_HOST + ":" + RMI_PORT + "/";
 
-        chambreService = (IChambreService) Naming.lookup(rmiUrl + "ChambreService");
-        clientService = (IClientService) Naming.lookup(rmiUrl + "ClientService");
-        reservationService = (IReservationService) Naming.lookup(rmiUrl + "ReservationService");
-        authenticationService = (IAuthenticationService) Naming.lookup(rmiUrl + "AuthenticationService");
+        chambreService = (IChambreService) java.rmi.Naming.lookup(rmiUrl + "ChambreService");
+        clientService = (IClientService) java.rmi.Naming.lookup(rmiUrl + "ClientService");
+        reservationService = (IReservationService) java.rmi.Naming.lookup(rmiUrl + "ReservationService");
+        authenticationService = (IAuthenticationService) java.rmi.Naming.lookup(rmiUrl + "AuthenticationService");
 
         System.out.println("✓ Connexion aux services RMI établie");
     }
 
-    public static void connecterServicesEJB() throws Exception {
-        String ejbUrl = "rmi://" + RMI_HOST + ":" + EJB_PORT + "/";
+    public static void connecterServicesEJB() throws NamingException {
+        final Properties jndiProperties = new Properties();
+        jndiProperties.put(Context.INITIAL_CONTEXT_FACTORY, "org.wildfly.naming.client.WildFlyInitialContextFactory");
+        jndiProperties.put(Context.PROVIDER_URL, "http-remoting://localhost:8080");
+        final Context context = new InitialContext(jndiProperties);
 
-        paiementService = (IPaiementService) Naming.lookup(ejbUrl + "PaiementService");
-        rapportService = (IRapportService) Naming.lookup(ejbUrl + "RapportService");
-        factureService = (IFactureService) Naming.lookup(ejbUrl + "FactureService");
+        String appName = "";
+        String moduleName = "hotel-ejb-server-1.0-SNAPSHOT";
+        String distinctName = "";
+
+        String paiementServiceJndi = "ejb:" + appName + "/" + moduleName + "/" + distinctName + "/PaiementServiceImpl!com.hotel.interfaces.IPaiementService";
+        String rapportServiceJndi = "ejb:" + appName + "/" + moduleName + "/" + distinctName + "/RapportServiceImpl!com.hotel.interfaces.IRapportService";
+        String factureServiceJndi = "ejb:" + appName + "/" + moduleName + "/" + distinctName + "/FactureServiceImpl!com.hotel.interfaces.IFactureService";
+
+        paiementService = (IPaiementService) context.lookup(paiementServiceJndi);
+        rapportService = (IRapportService) context.lookup(rapportServiceJndi);
+        factureService = (IFactureService) context.lookup(factureServiceJndi);
 
         System.out.println("✓ Connexion aux services EJB établie");
     }

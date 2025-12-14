@@ -7,23 +7,23 @@ import java.rmi.RemoteException;
 import java.time.LocalDate;
 import java.util.Map;
 
-public interface IRapportService extends Remote {
+public interface IRapportService {
 
-    Map<String, Object> genererRapportOccupation(LocalDate dateDebut, LocalDate dateFin) throws RemoteException;
+    Map<String, Object> genererRapportOccupation(LocalDate dateDebut, LocalDate dateFin);
 
-    Map<String, Object> genererRapportRevenus(LocalDate dateDebut, LocalDate dateFin) throws RemoteException;
+    Map<String, Object> genererRapportRevenus(LocalDate dateDebut, LocalDate dateFin);
 
-    Map<String, Object> genererRapportClients() throws RemoteException;
+    Map<String, Object> genererRapportClients();
 
-    Double calculerTauxOccupation(LocalDate dateDebut, LocalDate dateFin) throws RemoteException;
+    Double calculerTauxOccupation(LocalDate dateDebut, LocalDate dateFin);
 
-    Map<String, Object> getStatistiquesChambres() throws RemoteException;
+    Map<String, Object> getStatistiquesChambres();
 
-    Map<String, Object> getStatistiquesReservations(LocalDate dateDebut, LocalDate dateFin) throws RemoteException;
+    Map<String, Object> getStatistiquesReservations(LocalDate dateDebut, LocalDate dateFin);
 
-    Map<String, Object> getTopClients(int nombre) throws RemoteException;
+    Map<String, Object> getTopClients(int nombre);
 
-    String exporterRapport(Map<String, Object> rapport) throws RemoteException;
+    String exporterRapport(Map<String, Object> rapport);
 
-    Map<String, Object> genererRapportHistoriqueClient(Client client) throws RemoteException;
+    Map<String, Object> genererRapportHistoriqueClient(Client client);
 }
