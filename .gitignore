@@ -35,8 +35,7 @@ build/
 ### VS Code ###
 .vscode/
 
-/hotel-client-ui/
-/hotel-common/
+
 
 
 ### Mac OS ###

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane fx:id="rootPane" prefHeight="750.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hotel.client.controllers.PaiementController">
+    <left>
+        <VBox prefWidth="250.0" style="-fx-background-color: #0f172a;" BorderPane.alignment="CENTER">
+            <padding>
+                <Insets top="20.0" />
+            </padding>
+            <children>
+                <Label style="-fx-text-fill: #fbbf24; -fx-font-weight: bold; -fx-font-size: 20px; -fx-padding: 0 0 20 20;" text="ROYAL SUITE" />
+                <Label fx:id="userMsgLabel" style="-fx-text-fill: #64748b; -fx-font-size: 12px; -fx-padding: 0 0 30 20;" text="Bonjour, user" />
+                <Button maxWidth="1.7976931348623157E308" style="-fx-background-color: transparent; -fx-text-fill: #94a3b8; -fx-alignment: CENTER_LEFT; -fx-font-size: 14px; -fx-padding: 15;" text="🔍  Nouvelle Réservation" />
+                <Button maxWidth="1.7976931348623157E308" style="-fx-background-color: transparent; -fx-text-fill: #94a3b8; -fx-alignment: CENTER_LEFT; -fx-font-size: 14px; -fx-padding: 15;" text="🎫  Mes Réservations" />
+                <Region VBox.vgrow="ALWAYS" />
+                <Button maxWidth="1.7976931348623157E308" style="-fx-text-fill: #ef4444; -fx-background-color: transparent; -fx-alignment: CENTER_LEFT; -fx-padding: 15;" text="🚪  Déconnexion" />
+            </children>
+        </VBox>
+    </left>
+    <center>
+        <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0" style="-fx-background-color: #1e293b;" BorderPane.alignment="CENTER">
+            <padding>
+                <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
+            </padding>
+            <children>
+                <Label style="-fx-text-fill: white; -fx-font-size: 28px; -fx-font-weight: bold;" text="Finalisez votre paiement" />
+                <VBox maxWidth="600.0" spacing="15.0" style="-fx-background-color: #0f172a; -fx-padding: 30; -fx-background-radius: 10;">
+                    <children>
+                        <HBox alignment="CENTER_LEFT" spacing="10.0">
+                            <children>
+                                <Label style="-fx-text-fill: #94a3b8; -fx-font-size: 16px;" text="Montant à payer:" />
+                                <Label fx:id="montantLabel" style="-fx-text-fill: #fbbf24; -fx-font-weight: bold; -fx-font-size: 18px;" text="€€€" />
+                            </children>
+                        </HBox>
+                        <Label style="-fx-text-fill: white; -fx-font-size: 16px;" text="Paiement par Carte de Crédit" />
+                        <TextField fx:id="cardNumberField" promptText="Numéro de carte" style="-fx-background-color: #334155; -fx-text-fill: white; -fx-font-size: 14px;" />
+                        <HBox spacing="15.0">
+                            <children>
+                                <TextField fx:id="expiryDateField" promptText="Date d'expiration (MM/YY)" style="-fx-background-color: #334155; -fx-text-fill: white; -fx-font-size: 14px;" HBox.hgrow="ALWAYS" />
+                                <TextField fx:id="cvvField" promptText="CVV" style="-fx-background-color: #334155; -fx-text-fill: white; -fx-font-size: 14px;" />
+                            </children>
+                        </HBox>
+                        <Button fx:id="payWithCardButton" onAction="#handlePayWithCard" style="-fx-background-color: #22c55e; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 25; -fx-background-radius: 5;" text="Payer par Carte" />
+                        <Label style="-fx-text-fill: #94a3b8; -fx-font-size: 16px; -fx-padding: 10 0;" text="Ou" />
+                        <Button fx:id="payWithPayPalButton" onAction="#handlePayWithPayPal" style="-fx-background-color: #3b82f6; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 25; -fx-background-radius: 5;" text="Payer avec PayPal" />
+                        <Label fx:id="statusLabel" style="-fx-text-fill: RED;" />
+                    </children>
+                </VBox>
+            </children>
+        </VBox>
+    </center>
+</BorderPane>
